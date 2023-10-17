@@ -1,47 +1,6 @@
-import random
-
-print("You must be the adventurer we hired.")
-print("The dungeon is up ahead. Your reward will be given when you've cleared it out.")
-print("Feel free to visit the shops if you need anything.")
-
-def options():
-    print("1 - Go to Town")
-    print("2 - Go to Dungeon")
-    print("3 - Examine Weapons")
-    print("4 - Examine Armour")
-    print("5 - Examine Abilities")
-    print("6 - Quit")
-
-    while True:
-        choice = input("")
-        if choice in ["1","2","3","4","5","6"]:
-            if choice == 6:
-                exit()
-
-            else:
-                print("\n")
-                return choice
-
-def townOptions():
-    print("1 - Return to Dungeon")
-    print("2 - Visit Blacksmith")
-    print("3 - Visit Brewery")
-
-    while True:
-        choice = input("")
-        if choice in ["1","2","3"]:
-            print("\n")
-            return choice
-
-def entranceOptions():
-    print("You approach the entrance to the dungeon.")
-    print("1 - Enter")
-    print("2 - Return to Town")
-    while True:
-        choice = input("")
-        if choice in ["1","2"]:
-            print("\n")
-            return choice
+﻿import random
+import os
+import pyautogui
 
 class weapon:
     def __init__(self, dmg, bld, dmgType, prof, elNombre):
@@ -89,8 +48,7 @@ class weapon:
 
 class enemy:
     def __init__(self, difficultyLevel):
-        self._enemyTypes = ("Rat", "Goblin")
-        self._enemyResistances = {"Rat" : ""}
+        
 
         self._enemyType = enemyTypes[random.randint(0,len(enemyTypes)-1)]
         self._health = (10 ** enemyTypes.index(self._enemyType)) * (random.randint(5,15)/10)
@@ -128,7 +86,8 @@ class enemy:
 
 class dungeonCrawler:
     def __init__(self):
-        self._damageTypes = ["Fire","Poison","Acid","Magic","Force","Sand","Plant"]
+        self._currentEnemy = enemy(1)
+        self._damageTypes = ["Fire","Poison","Acid","Magic","Force","Sand","Plant","Blighted","Corrupted"]
         self._proficiencies = ["Small","Large","Bloodless","Relentless","Quick","Slow","Iron Stomach"]
 
     def getRandomDamageType(self):
@@ -137,6 +96,69 @@ class dungeonCrawler:
     def getRandomProficiencyType(self):
         return self._proficiencies[random.randint(0,len(self._proficiencies)-1)]
 
+    def playGame(self):
+        # I'm thinking of some kind of horror/ strange elements, where the enemies get progressively weirder 
+        # One idea - What if it moves your cursor (There's a library for that - It's easy)
+        # --> Maybe somewhere it moves your cursor and types something
+        # Maybe the setting changes. Some external voice knows it's wrong?
+        # An external voice could speak in scrolling text instead of just block-placed text
+        
+        rawName = os.getlogin()
+        #      ↓ Capitalise 1st letter      ↓ Lower case the rest of the name, then cut off first letter
+        name = rawName[0].upper() + (rawName[0:].lower())[1:]
+
+    def introduction(self):
+        print("You must be the adventurer we hired.")
+        print("The dungeon is up ahead. Your reward will be given when you've cleared it out.")
+        print("Feel free to visit the shops if you need anything.")
+
+
+    def options(self):
+        print("1 - Go to Town")
+        print("2 - Go to Dungeon")
+        print("3 - Examine Weapons")
+        print("4 - Examine Armour")
+        print("5 - Examine Abilities")
+        print("6 - Quit")
+
+        while True:
+            choice = input("")
+            if choice in ["1","2","3","4","5","6"]:
+                if choice == 6:
+                    exit()
+
+                else:
+                    print("\n")
+                    return choice
+
+
+    def townOptions(self):
+        print("1 - Return to Dungeon")
+        print("2 - Visit Blacksmith")
+        print("3 - Visit Brewery")
+
+        while True:
+            choice = input("")
+            if choice in ["1","2","3"]:
+                print("\n")
+                return choice
+
+
+    def entranceOptions(self):
+        print("You approach the entrance to the dungeon.")
+        print("1 - Enter")
+        print("2 - Return to Town")
+        while True:
+            choice = input("")
+            if choice in ["1","2"]:
+                print("\n")
+                return choice
+
+
+
+
+enemyTypes = ("Rat", "Goblin")
+enemyResistances = {"Rat" : "None", "Goblin" : "Poison"}
 
 game = dungeonCrawler()
 game.playGame()
